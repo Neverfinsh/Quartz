@@ -14,19 +14,37 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 
+/******
+ * 
+ * 功能:测试 从JObExecutionContext中获取值，可序列化的对象。
+ *   1.用set的方法获取值。
+ *   
+ * @author Lw
+ * 2017年8月24日
+ *
+ */
 
 
-public class HelloScheduler {
+public class HelloScheduler3 {
+	
+
+
 	public static void main(String[] args) throws Exception {
 		
        //创建一个JobDetail实例,将该实例与HelloJob 的class绑定
 		JobDetail jobdetail=JobBuilder.newJob(HelloJob.class)
-				.withIdentity("myjob", "group1").build();
+				.withIdentity("myjob", "group1")
+				.usingJobData("FloatJobValue", 3.14F)//jobdetail中获取的值
+				.build();
 		
 		//创建一个trigger的实例,定义该job立即执行，并且每隔俩秒重复的执行一次，直达程序结束
 		Trigger trigger= TriggerBuilder
 				.newTrigger()
 				.withIdentity("mytrigger", "grop1")
+				
+				.usingJobData("message", "hello mytrigger")
+				.usingJobData("DoubleTriggerValue", 2.0D)
+				
 				.startNow()//定义Trigger的基本的信息
          //执行的HelloJob的方法				
 				.withSchedule(
